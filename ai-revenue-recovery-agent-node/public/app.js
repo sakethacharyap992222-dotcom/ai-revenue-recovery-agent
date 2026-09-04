@@ -331,15 +331,17 @@ async function payments() {
         ${(paymentsData || [])
           .map(
             (payment) => `
-              <div class="list-item" style="grid-template-columns: 1.4fr 1fr auto auto auto;">
+              <div class="list-item" style="grid-template-columns: 1.4fr 1fr auto auto;">
                 <div>
                   <div class="name">${escapeHtml(customerName(payment))}</div>
                   <div class="muted-text">${escapeHtml(payment.failure_reason || 'Successful payment')}</div>
                 </div>
                 <div class="amount">${money(payment.amount || 0)}</div>
-                <span class="tag ${payment.status === 'failed' ? 'tag-critical' : 'tag-success'}">${escapeHtml(payment.status || 'unknown')}</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="tag ${payment.status === 'failed' ? 'tag-critical' : 'tag-success'}">${escapeHtml(payment.status || 'unknown')}</span>
+                  ${payment.status === 'failed' ? `<button class="action-btn" type="button" onclick="analyze(${payment.id})">AI Analyze</button>` : ''}
+                </div>
                 <span class="muted-text">${new Date(payment.created_at).toLocaleString()}</span>
-                ${payment.status === 'failed' ? `<button class="action-btn" type="button" onclick="analyze(${payment.id})">AI Analyze</button>` : '<span></span>'}
               </div>
             `
           )
