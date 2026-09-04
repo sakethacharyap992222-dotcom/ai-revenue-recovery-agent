@@ -399,7 +399,7 @@ app.get('/api/health', async (req, res) => {
     }
   }
 
-  res.json({
+    res.json({
     ok: true,
     mode: dbMode,
     database,
@@ -409,8 +409,10 @@ app.get('/api/health', async (req, res) => {
     timestamp: new Date().toISOString(),
     message: 'Backend is ready'
   });
-
+});
+ 
 app.post('/api/auth/login', (req, res) => {
+  app.post('/api/auth/login', (req, res) => {
   const email = safeString(req.body?.email, '').trim().toLowerCase();
   const password = safeString(req.body?.password, '');
 
