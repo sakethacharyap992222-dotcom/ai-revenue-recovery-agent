@@ -189,7 +189,7 @@ async function initializeDatabase() {
 
     return { mode: 'database' };
   } catch (error) {
-    console.warn('PostgreSQL unavailable. Running in demo mode.', error.message);
+    console.error('PostgreSQL connection failed:', error.message); 
     buildDemoState();
     return { mode: 'demo' };
   }
