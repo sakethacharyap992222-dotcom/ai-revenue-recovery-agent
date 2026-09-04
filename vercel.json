@@ -1,15 +1,14 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "ai-revenue-recovery-agent-node/server.js",
-      "use": "@vercel/node"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "ai-revenue-recovery-agent-node/public/**"
     }
-  ],
-  "routes": [
+  },
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "ai-revenue-recovery-agent-node/server.js"
+      "source": "/(.*)",
+      "destination": "/api/index"
     }
   ]
 }

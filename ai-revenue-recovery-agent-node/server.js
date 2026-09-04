@@ -694,8 +694,21 @@ app.post('/api/razorpay/order', async (req, res) => {
   }
 });
 
+app.use((error, req, res, next) => {
+  console.error('Request failed:', error.message);
+  if (res.headersSent) return next(error);
+  res.status(500).json({ error: 'Unable to complete this request.' });
+});
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(publicDir, 'index.html'));
+  res.sendFile(path.join(publicDir, 'index.html'), (error) => {
+    if (error) {
+      console.error('Unable to serve the application:', error.message);
+      if (!res.headersSent) {
+        res.status(error.statusCode || 500).json({ error: 'Application files are unavailable.' });
+      }
+    }
+  });
 });
 
 function startServer(port) {
