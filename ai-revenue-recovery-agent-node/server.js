@@ -195,6 +195,18 @@ async function initializeDatabase() {
   }
 }
 
+const databaseReady = initializeDatabase()
+  .then((result) => {
+    dbMode = result.mode;
+    return result;
+  })
+  .catch((error) => {
+    console.error('Database initialization failed:', error.message);
+    buildDemoState();
+    dbMode = 'demo';
+    return { mode: 'demo' };
+  });
+
 async function getDashboardData() {
   if (dbMode === 'database') {
     const result = await pool.query(`
@@ -386,6 +398,10 @@ app.use((req, res, next) => {
 });
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(async (req, res, next) => {
+  await databaseReady;
+  next();
+});
 app.use(express.static(publicDir));
 
 app.get('/api/health', async (req, res) => {
@@ -399,20 +415,18 @@ app.get('/api/health', async (req, res) => {
     }
   }
 
-    res.json({
+  res.json({
     ok: true,
     mode: dbMode,
     database,
-    databaseUrlPresent: Boolean(process.env.DATABASE_URL),
+    databaseUrlPresent: Boolean(dbUrl),
     service: 'recoverai-api',
     uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
     message: 'Backend is ready'
   });
 });
- 
 app.post('/api/auth/login', (req, res) => {
-  app.post('/api/auth/login', (req, res) => {
   const email = safeString(req.body?.email, '').trim().toLowerCase();
   const password = safeString(req.body?.password, '');
 
@@ -696,13 +710,16 @@ function startServer(port) {
 }
 
 async function start() {
-  const result = await initializeDatabase();
-  dbMode = result.mode;
+  await databaseReady;
   startServer(PORT);
 }
 
-start().catch((error) => {
-  console.error('Failed to initialize server:', error.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  start().catch((error) => {
+    console.error('Failed to initialize server:', error.message);
+    process.exit(1);
+  });
+}
+
+module.exports = app;
 
