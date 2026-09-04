@@ -9,11 +9,17 @@ const app = express();
 app.disable('x-powered-by');
 const PORT = 3000;
 const publicDir = path.join(__dirname, 'public');
-const dbUrl = process.env.DATABASE_URL;
+// Marketplace Postgres integrations generally provide DATABASE_URL. POSTGRES_URL
+// keeps the app compatible with projects created with the earlier Vercel Postgres
+// integration.
+const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+const runningOnVercel = Boolean(process.env.VERCEL);
 const pool = dbUrl ? new Pool({
   connectionString: dbUrl,
-  max: 10,
-  idleTimeoutMillis: 30000,
+  // A serverless function can be replicated many times, so keep each instance's
+  // pool deliberately small. Local development can use a larger pool.
+  max: runningOnVercel ? 1 : 10,
+  idleTimeoutMillis: runningOnVercel ? 10000 : 30000,
   connectionTimeoutMillis: 5000
 }) : null;
 

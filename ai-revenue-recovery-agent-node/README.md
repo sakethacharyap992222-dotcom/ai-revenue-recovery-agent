@@ -22,6 +22,18 @@ The app falls back to seeded demo data when PostgreSQL is unavailable. Razorpay 
 
 Set `SESSION_SECRET` to a long random value in Vercel and local `.env` files. It keeps login tokens valid across serverless requests and deployments.
 
+## Deploy with Vercel + PostgreSQL
+
+Vercel's original Postgres product is no longer available for new databases. Create a Postgres database through a Marketplace storage integration such as Neon, then connect it to this Vercel project. The integration injects its credentials as environment variables.
+
+1. In the Vercel dashboard, open this project's **Storage** tab, create a Postgres integration (Neon is a good default), and connect it to both **Preview** and **Production**.
+2. In **Project Settings → Environment Variables**, set `DATABASE_URL` for Preview and Production to the database connection string supplied by the integration. If the integration only provides `POSTGRES_URL`, the app accepts that too.
+3. Add a long, unique `SESSION_SECRET` in those same environments. Add the Razorpay variables only if payment-order creation is required.
+4. Redeploy. On the first request the app creates its tables and seed data automatically. The database account must have permission to create tables.
+5. Visit `/api/health`; it should return `"mode": "database"` and `"database": "connected"`.
+
+To provision through the Vercel CLI instead, link the project and run `vercel integration add neon`, selecting Preview and Production when prompted. Then map the injected connection string to `DATABASE_URL` if the provider did not use that name. Pull development credentials with `vercel env pull` rather than copying production secrets into source control.
+
 ## Demo flow
 
 1. Sign in with the demo credentials.
