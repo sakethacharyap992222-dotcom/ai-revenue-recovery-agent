@@ -16,18 +16,24 @@
   --shadow: 0 24px 44px rgba(2, 6, 14, 0.38);
 }
 
-/* Show every dashboard section on mobile without clipping navigation items. */
+/* Keep every dashboard section in one scrollable mobile navigation row. */
 @media (max-width: 760px) {
   body .app-shell nav#nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    overflow: visible;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
   }
 
   body .app-shell nav#nav .nav-btn {
-    width: 100%;
-    min-width: 0;
-    white-space: normal;
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  body .app-shell nav#nav::-webkit-scrollbar {
+    display: none;
   }
 }
 
