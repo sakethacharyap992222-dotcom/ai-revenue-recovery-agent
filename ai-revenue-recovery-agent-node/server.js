@@ -390,6 +390,7 @@ app.use(express.static(publicDir));
 
 app.get('/api/health', async (req, res) => {
   let database = dbMode === 'demo' ? 'demo' : 'connected';
+
   if (pool) {
     try {
       await pool.query('SELECT 1');
@@ -402,6 +403,7 @@ app.get('/api/health', async (req, res) => {
     ok: true,
     mode: dbMode,
     database,
+    databaseUrlPresent: Boolean(process.env.DATABASE_URL),
     service: 'recoverai-api',
     uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
