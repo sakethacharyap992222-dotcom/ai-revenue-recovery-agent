@@ -16,6 +16,18 @@
   --shadow: 0 24px 44px rgba(2, 6, 14, 0.38);
 }
 
+/* Keep every mobile navigation item fully visible instead of clipping the next item. */
+@media (max-width: 760px) {
+  body .app-shell .sidebar {
+    overflow: visible;
+  }
+
+  body .app-shell nav#nav {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
