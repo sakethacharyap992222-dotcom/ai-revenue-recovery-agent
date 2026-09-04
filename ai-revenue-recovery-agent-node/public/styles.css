@@ -37,6 +37,61 @@
   }
 }
 
+/* Compact payment details so related information stays together on small screens. */
+.payment-list-item {
+  grid-template-columns: minmax(0, 1.4fr) minmax(80px, 1fr) minmax(132px, auto) minmax(132px, auto);
+  min-height: 72px;
+  padding: 14px;
+}
+
+.payment-list-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(80px, 1fr) minmax(132px, auto) minmax(132px, auto);
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 4px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.payment-list-item .amount {
+  white-space: nowrap;
+}
+
+.payment-list-item > div:nth-child(3) {
+  justify-content: flex-end;
+}
+
+.payment-list-item .action-btn {
+  padding: 7px 10px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .payment-list .payment-list-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 10px 14px;
+  }
+
+  .payment-list-heading {
+    display: none;
+  }
+
+  .payment-list-item .amount,
+  .payment-list-item .muted-text:last-child {
+    text-align: right;
+  }
+
+  .payment-list-item .action-btn {
+    padding: 7px 9px;
+    font-size: 0.72rem;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

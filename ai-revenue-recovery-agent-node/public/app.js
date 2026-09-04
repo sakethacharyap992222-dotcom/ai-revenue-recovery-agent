@@ -327,11 +327,17 @@ async function payments() {
           <p class="muted">Payment status and recovery opportunities.</p>
         </div>
       </div>
-      <div class="list">
+      <div class="list payment-list">
+        <div class="payment-list-heading" aria-hidden="true">
+          <span>Customer</span>
+          <span>Amount</span>
+          <span>Status</span>
+          <span>Date</span>
+        </div>
         ${(paymentsData || [])
           .map(
             (payment) => `
-              <div class="list-item" style="grid-template-columns: 1.4fr 1fr auto auto;">
+              <div class="list-item payment-list-item">
                 <div>
                   <div class="name">${escapeHtml(customerName(payment))}</div>
                   <div class="muted-text">${escapeHtml(payment.failure_reason || 'Successful payment')}</div>
