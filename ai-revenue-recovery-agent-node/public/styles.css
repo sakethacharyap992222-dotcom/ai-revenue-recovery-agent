@@ -16,6 +16,160 @@
   --shadow: 0 24px 44px rgba(2, 6, 14, 0.38);
 }
 
+/* Intelligence dashboard upgrades */
+.icon-btn {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.intelligence-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+}
+
+.performance-card,
+.signals-card {
+  min-height: 238px;
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--primary);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.health-layout {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 18px;
+}
+
+.health-ring {
+  display: grid;
+  width: 130px;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--primary) var(--progress), rgba(214, 91, 69, 0.12) 0);
+}
+
+.health-ring::before {
+  grid-area: 1 / 1;
+  width: 104px;
+  height: 104px;
+  border-radius: inherit;
+  background: var(--panel);
+  content: "";
+}
+
+.health-ring > div {
+  z-index: 1;
+  grid-area: 1 / 1;
+  text-align: center;
+}
+
+.health-ring strong,
+.health-ring span {
+  display: block;
+}
+
+.health-ring strong { font-size: 1.45rem; }
+.health-ring span { color: var(--muted); font-size: 0.72rem; }
+.health-copy strong { font-size: 1rem; }
+.health-copy p { margin: 7px 0 14px; color: var(--muted); font-size: 0.84rem; }
+
+.inline-action {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.inline-action span { margin-left: 5px; transition: transform 0.2s ease; }
+.inline-action:hover span { display: inline-block; transform: translateX(4px); }
+
+.live-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--success);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.live-label i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px rgba(22, 139, 114, 0.12);
+}
+
+.signal-list { display: grid; gap: 14px; margin-top: 16px; }
+.signal-item { display: flex; align-items: flex-start; gap: 10px; }
+.signal-item strong { display: block; font-size: 0.84rem; }
+.signal-item p { margin: 3px 0 0; color: var(--muted); font-size: 0.74rem; }
+
+.signal-icon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 8px;
+  font-size: 0.73rem;
+  font-weight: 800;
+}
+
+.signal-icon.danger { background: rgba(200, 71, 71, 0.12); color: var(--danger); }
+.signal-icon.success { background: rgba(22, 139, 114, 0.12); color: var(--success); }
+.signal-icon.primary { background: rgba(214, 91, 69, 0.12); color: var(--primary); }
+
+:root[data-theme="night"] {
+  --bg: #101417;
+  --bg-2: #151b1f;
+  --panel: #191f23;
+  --panel-strong: #f7f3ec;
+  --panel-soft: #252d31;
+  --line: rgba(244, 239, 230, 0.12);
+  --text: #f7f3ec;
+  --muted: #aeb8b4;
+  --muted-strong: #d8dfda;
+  --shadow: 0 22px 50px rgba(0, 0, 0, 0.28);
+}
+
+:root[data-theme="night"] body {
+  background-color: var(--bg);
+  background-image: linear-gradient(rgba(112, 203, 187, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(112, 203, 187, 0.035) 1px, transparent 1px), radial-gradient(circle at 10% 0%, rgba(214, 91, 69, 0.15), transparent 35%);
+}
+
+@media (max-width: 900px) {
+  .intelligence-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .health-layout { align-items: flex-start; gap: 16px; }
+  .health-ring { width: 104px; }
+  .health-ring::before { width: 84px; height: 84px; }
+  .health-ring strong { font-size: 1.1rem; }
+}
+
 /* Keep every dashboard section in one scrollable mobile navigation row. */
 @media (max-width: 760px) {
   body .app-shell nav#nav {

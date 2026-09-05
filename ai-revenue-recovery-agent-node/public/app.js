@@ -1,5 +1,17 @@
 const getStoredToken = () => localStorage.getItem('token') || sessionStorage.getItem('token');
 
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('recoverai-theme', theme);
+  const button = document.getElementById('themeToggle');
+  if (button) {
+    const isNight = theme === 'night';
+    button.textContent = isNight ? '☀' : '◐';
+    button.setAttribute('aria-label', isNight ? 'Use light theme' : 'Use night theme');
+    button.title = isNight ? 'Use light theme' : 'Use night theme';
+  }
+}
+
 const api = async (url, options = {}) => {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   const token = getStoredToken();
@@ -221,6 +233,9 @@ async function dash() {
   ]);
 
   const content = document.getElementById('content');
+  const riskCoverage = dashboardData.risk
+    ? Math.min(100, Math.round(((dashboardData.recovered || 0) / dashboardData.risk) * 100))
+    : 0;
   content.innerHTML = `
     <div class="command-strip">
       <div><span class="live-kicker"><span class="pulse-dot"></span>LIVE MONITORING</span><strong>Recovery operations are under control</strong></div>
@@ -231,6 +246,33 @@ async function dash() {
       ${metricCard('Revenue recovered', money(dashboardData.recovered), dashboardData.recoveryRate === null || dashboardData.recoveryRate === undefined ? 'Recovery rate unavailable' : `${Number(dashboardData.recoveryRate).toFixed(1)}% recovery rate`)}
       ${metricCard('Open cases', dashboardData.open_cases, 'AI prioritized')}
       ${metricCard('Customers', dashboardData.customers, 'Monitored')}
+    </div>
+
+    <div class="intelligence-grid">
+      <section class="card performance-card">
+        <div class="card-header">
+          <div><span class="section-kicker">RECOVERY MOMENTUM</span><h3>Revenue protection health</h3></div>
+          <span class="badge up">Live model</span>
+        </div>
+        <div class="health-layout">
+          <div class="health-ring" style="--progress: ${riskCoverage}%">
+            <div><strong>${riskCoverage}%</strong><span>covered</span></div>
+          </div>
+          <div class="health-copy">
+            <strong>${valueOrDash(dashboardData.open_cases)} opportunities need attention</strong>
+            <p>Prioritize the highest-value failed payments first to protect this week's revenue.</p>
+            <button class="inline-action" type="button" onclick="render('recovery')">Review recovery queue <span>→</span></button>
+          </div>
+        </div>
+      </section>
+      <section class="card signals-card">
+        <div class="card-header"><div><span class="section-kicker">SIGNAL FEED</span><h3>What changed</h3></div><span class="live-label"><i></i> Monitoring</span></div>
+        <div class="signal-list">
+          <div class="signal-item"><span class="signal-icon danger">!</span><div><strong>${valueOrDash(dashboardData.failed)} failed payments detected</strong><p>AI has ranked each one by recovery potential.</p></div></div>
+          <div class="signal-item"><span class="signal-icon success">✓</span><div><strong>${money(dashboardData.recovered)} successfully recovered</strong><p>Recovered payment volume across active accounts.</p></div></div>
+          <div class="signal-item"><span class="signal-icon primary">✦</span><div><strong>Recommendations are ready</strong><p>Review the next best action for every open case.</p></div></div>
+        </div>
+      </section>
     </div>
 
     <div class="data-grid">
@@ -468,6 +510,10 @@ document.getElementById('refreshBtn').addEventListener('click', () => {
   });
 });
 
+document.getElementById('themeToggle').addEventListener('click', () => {
+  applyTheme(document.documentElement.dataset.theme === 'night' ? 'light' : 'night');
+});
+
 async function analyze(id) {
   try {
     const result = await api(`/api/recovery/analyze/${id}`, { method: 'POST' });
@@ -603,6 +649,7 @@ async function restoreSession() {
 }
 
 showLanding();
+applyTheme(localStorage.getItem('recoverai-theme') || 'light');
 restoreSession();
 loadLandingStats();
 setInterval(refreshVisibleData, 15000);
