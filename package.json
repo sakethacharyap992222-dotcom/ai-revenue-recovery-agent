@@ -4,7 +4,8 @@
   "main": "ai-revenue-recovery-agent-node/server.js",
   "scripts": {
     "start": "node ai-revenue-recovery-agent-node/server.js",
-    "dev": "node --watch ai-revenue-recovery-agent-node/server.js"
+    "dev": "node --watch ai-revenue-recovery-agent-node/server.js",
+    "vercel-build": "node --check ai-revenue-recovery-agent-node/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
