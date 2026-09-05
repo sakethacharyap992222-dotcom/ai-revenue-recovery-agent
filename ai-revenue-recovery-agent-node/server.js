@@ -712,9 +712,7 @@ app.get('*', (req, res) => {
 });
 
 function startServer(port) {
-  const server = app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port} (${dbMode} mode)`);
-  });
+  const server = app.listen(port);
 
   server.on('error', (error) => {
     if (error.code === 'EADDRINUSE') {
